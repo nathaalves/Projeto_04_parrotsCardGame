@@ -7,20 +7,52 @@ while (numberOfCards%2 !== 0 || numberOfCards < 2 || numberOfCards > 14) {
 
 }
 
-for (let i = 1; i <= numberOfCards; i++) {
+let sortCards = []
+let cont = 0
+for (let i = 0; i < numberOfCards/2; i++) {
 
-    let divElement = document.createElement("div")
-    divElement.setAttribute("class", "card")
-    document.querySelector(".container").appendChild(divElement);
+    for (let j = 0; j < 2; j++) {
+        sortCards[cont] = i
+        cont++
+    }
+}
+
+function comparador() { 
+	return Math.random() - 0.5; 
+}
+
+sortCards.sort(comparador)
+
+let card = []
+let cardFront = []
+let cardBack = []
+
+for ( let i = 0; i < numberOfCards; i++) {
+
+    card[i] = document.createElement("div")
+    card[i].setAttribute("class", "card")
+    card[i].setAttribute("onclick", "flipCard(this)")
+    document.querySelector(".container").appendChild(card[i]);
+
+    cardFront[i] = document.createElement("div")
+    cardFront[i].setAttribute("class", "cardFace front")
+    card[i].appendChild(cardFront[i])
+
+    cardBack[i] = document.createElement("div")
+    cardBack[i].setAttribute("class", "cardFace back")
+    card[i].appendChild(cardBack[i])
+
+    let imgFront = document.createElement("img")
+    imgFront.setAttribute("src", "images/front.png")
+    cardFront[i].appendChild(imgFront);
+
+    let imgBack = document.createElement("img")
+    imgBack.setAttribute("src", `images/img${sortCards[i]}.gif`)
+    cardBack[i].appendChild(imgBack);
     
 }
 
-const cards = document.querySelectorAll(".card")
-
-for (let i = 0; i < cards.length; i++) {
-
-    let imgElement = document.createElement("img")
-    imgElement.setAttribute("src", "images/front.png")
-    cards[i].appendChild(imgElement);
-    
+function flipCard(fliped) {
+    fliped.classList.toggle("fliped")
 }
+
