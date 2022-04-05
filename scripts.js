@@ -1,0 +1,1 @@
+const numberOfCards = prompt("Com quantas cartas você quer jogar?")
