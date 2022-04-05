@@ -56,7 +56,7 @@ main {
 
     transition: 1s;
     transform-style: preserve-3d;
-    cursor: pointer;
+    background-color: #A7E9AF;
 }
 
 .cardFace {
@@ -79,6 +79,7 @@ main {
 
 .fliped {
     transform: rotateY(180deg);
+    cursor: pointer;
 }
 
 @media (max-width: 400px) {
