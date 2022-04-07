@@ -73,13 +73,23 @@ main {
 
 .back {
     transform: rotateY(180deg);
-    
-    
 }
 
 .fliped {
     transform: rotateY(180deg);
     cursor: pointer;
+}
+
+.stopwatch {
+
+    position: fixed;
+    top: 10px;
+    right: 10px;
+
+    font-family: 'Roboto';
+    font-weight: 700;
+    font-size: 25px;
+
 }
 
 @media (max-width: 400px) {
@@ -93,5 +103,8 @@ main {
         width: 200px;
     }
 
+    .stopwatch {
+        font-size: 14px;
+    }
 
 }
