@@ -31,98 +31,85 @@ function startGame() {
 
     sortCards.sort(comparador)
 
-    let card = []
-    let cardFront = []
-    let cardBack = []
+    const cardContainer = document.querySelector(".container")
 
     for ( let i = 0; i < numberOfCards; i++) {
 
-        card[i] = document.createElement("div")
-        card[i].setAttribute("class", "card fliped")
-        card[i].setAttribute("onclick", "flipCard(this)")
-        document.querySelector(".container").appendChild(card[i]);
-
-        cardFront[i] = document.createElement("div")
-        cardFront[i].setAttribute("class", "cardFace front")
-        card[i].appendChild(cardFront[i])
-
-        cardBack[i] = document.createElement("div")
-        cardBack[i].setAttribute("class", "cardFace back")
-        card[i].appendChild(cardBack[i])
-
-        let imgFront = document.createElement("img")
-        imgFront.setAttribute("src", `images/img${sortCards[i]}.gif`)
-        cardFront[i].appendChild(imgFront);
-
-        let imgBack = document.createElement("img")
-        imgBack.setAttribute("src", "images/front.png")
-        cardBack[i].appendChild(imgBack);
+        cardContainer.innerHTML += `
+        <div class="card fliped" onclick="flipCard(this)">
+            <div class="cardFace front">
+                <img src="images/img${sortCards[i]}.gif" alt="">
+            </div>
+            <div class="cardFace back">
+                <img src="images/front.png" alt="">
+            </div>
+        </div>`
         
     }
 
     timer = setInterval(timeCounter, 1000)
-
 }
 
-let flipedCards = []
-let flipedCount = 0
+let unflipedCards = []
+let unflipedCount = 0
 let playCount = 0
 
 function flipCard(fliped) {
 
-    fliped.classList.toggle("fliped")
-    flipedCards[flipedCount] = fliped
-    flipedCount += 1
+    playCount += 1
+
+    fliped.classList.remove("fliped")
+    unflipedCards[unflipedCount] = fliped
+    unflipedCount += 1
 
     fliped.setAttribute("onclick", "")
 
-    playCount += 1
+    if (unflipedCount === 2) {
+        //soluções: 1 - criar uma nova variável temp; 2 - desabilitar o onclick. substituir o toggler por remove ou add
+        const img1 = unflipedCards[0].querySelector("img").src
+        const img2 = unflipedCards[1].querySelector("img").src
 
-    if (flipedCount === 2) {
-
-        const img1 = flipedCards[0].querySelector("img").src
-        const img2 = flipedCards[1].querySelector("img").src
-
-        if (img1 === img2) {
-
-            flipedCards[0].classList.add("ok")
-            flipedCards[1].classList.add("ok")
-
-        } else {
+        if (img1 !== img2) {
 
             setTimeout(flipCardsBack, 1000)
             function flipCardsBack () {
                 for (let i = 0; i < 2; i++) {
-                    flipedCards[i].classList.toggle("fliped")
-                    flipedCards[i].setAttribute("onclick", "flipCard(this)")
+                    unflipedCards[i].classList.add("fliped")
+                    unflipedCards[i].setAttribute("onclick", "flipCard(this)")
                 }
             }
         }
-        flipedCount = 0
+
+        unflipedCount = 0
     }
 
     setTimeout(win, 500)
-    function win() {
-        if(document.querySelectorAll(".ok").length === Number(numberOfCards)) {            
-            clearInterval(timer)
-            alert(`Você venceu em ${playCount} jogadas, em um tempo de ${document.querySelector(".stopwatch").innerHTML}`)
+}
 
+function win() {
+
+    if(document.querySelectorAll(".fliped").length === 0) {    
+
+        clearInterval(timer)
+        alert(`Você venceu em ${playCount} jogadas, cem um tempo de ${document.querySelector(".stopwatch").innerHTML}`)
+
+        const answer = prompt("Você quer jogar novamente? responda com 'sim' ou 'não'")
+
+        while (answer !== "sim" && answer !== "não") {
+            alert("As únicas opções de resposta é 'sim' ou 'não'")
             answer = prompt("Você quer jogar novamente? responda com 'sim' ou 'não'")
+        }
 
-            while (answer !== "sim" && answer !== "não") {
-                alert("As únicas opções de resposta é 'sim' ou 'não'")
-                answer = prompt("Você quer jogar novamente? responda com 'sim' ou 'não'")
+        if (answer === "sim") {
+
+            let cards = document.querySelectorAll(".card")
+            for (let i = 0; i < numberOfCards; i++) {
+                cards[i].remove()
             }
 
-            if (answer === "sim") {
-                let cards = document.querySelectorAll(".card")
-                for (let i = 0; i < numberOfCards; i++) {
-                    cards[i].remove()
-                }
-                playCount = 0
-                sec = 0
-                startGame()
-            }
+            playCount = 0
+            sec = 0
+            startGame()
         }
     }
 }
@@ -139,32 +126,21 @@ function timeCounter () {
         min++
         sec = 0
     }
-    if (sec < 10) {
-        timerSec = "0" + sec
-    } else {
-        timerSec = sec
-    }
+
+    timerSec = (sec < 10) ? "0" + sec : sec
 
     if (min === 60) {
         hour++
         min = 0
     }
-    if (min < 10) {
-        timerMin = "0" + min
-    } else {
-        timerMin = min
-    }
+    
+    timerMin = (min < 10) ? "0" + min : min
 
     if (hour > 24) {
         hour = 0
     }
-    if (hour < 10) {
-        timerHour = "0" + hour
-    } else {
-        timerHour = hour
-    }    
+
+    timerHour = (hour < 10) ? "0" + hour : hour
 
     document.querySelector(".stopwatch").innerHTML = `${timerHour}:${timerMin}:${timerSec}`
-
 }
-
