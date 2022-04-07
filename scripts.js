@@ -12,7 +12,6 @@ function startGame() {
 
         alert("Você deve inserir um número par de 2 a 14")
         numberOfCards = prompt("Com quantas cartas você quer jogar?")
-
     }
 
     let sortCards = []
@@ -65,21 +64,24 @@ function flipCard(fliped) {
     fliped.setAttribute("onclick", "")
 
     if (unflipedCount === 2) {
-        //soluções: 1 - criar uma nova variável temp; 2 - desabilitar o onclick. substituir o toggler por remove ou add
-        const img1 = unflipedCards[0].querySelector("img").src
-        const img2 = unflipedCards[1].querySelector("img").src
+        
+        const temp1 = unflipedCards[0]
+        const temp2 = unflipedCards[1]
+        const img1 = temp1.querySelector("img").src
+        const img2 = temp2.querySelector("img").src
 
         if (img1 !== img2) {
 
             setTimeout(flipCardsBack, 1000)
             function flipCardsBack () {
-                for (let i = 0; i < 2; i++) {
-                    unflipedCards[i].classList.add("fliped")
-                    unflipedCards[i].setAttribute("onclick", "flipCard(this)")
-                }
+                
+                temp1.classList.add("fliped")
+                temp1.setAttribute("onclick", "flipCard(this)")
+                temp2.classList.add("fliped")
+                temp2.setAttribute("onclick", "flipCard(this)")
             }
         }
-
+        
         unflipedCount = 0
     }
 
@@ -96,7 +98,7 @@ function win() {
         const answer = prompt("Você quer jogar novamente? responda com 'sim' ou 'não'")
 
         while (answer !== "sim" && answer !== "não") {
-            alert("As únicas opções de resposta é 'sim' ou 'não'")
+            alert("A única opções de resposta é 'sim' ou 'não'")
             answer = prompt("Você quer jogar novamente? responda com 'sim' ou 'não'")
         }
 
