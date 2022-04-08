@@ -1,12 +1,12 @@
 
-let numberOfCards = ""
 let timer
+const cardsContainer = document.querySelector(".container")
 
 startGame()  
 
 function startGame() {
 
-    numberOfCards = prompt("Com quantas cartas você quer jogar?")
+    let numberOfCards = prompt("Com quantas cartas você quer jogar?")
 
     while (numberOfCards%2 !== 0 || numberOfCards < 2 || numberOfCards > 14) {
 
@@ -14,36 +14,29 @@ function startGame() {
         numberOfCards = prompt("Com quantas cartas você quer jogar?")
     }
 
-    let sortCards = []
-    let cont = 0
+    let cards = []
     for (let i = 0; i < numberOfCards/2; i++) {
 
         for (let j = 0; j < 2; j++) {
-            sortCards[cont] = i
-            cont++
+            cards.push(`images/img${i}.gif`)
         }
     }
 
-    function comparador() { 
+    cards.sort(function comparador() { 
         return Math.random() - 0.5; 
-    }
-
-    sortCards.sort(comparador)
-
-    const cardContainer = document.querySelector(".container")
+    })
 
     for ( let i = 0; i < numberOfCards; i++) {
 
-        cardContainer.innerHTML += `
+        cardsContainer.innerHTML += `
         <div class="card fliped" onclick="flipCard(this)">
             <div class="cardFace front">
-                <img src="images/img${sortCards[i]}.gif" alt="">
+                <img src=${cards[i]} alt="">
             </div>
             <div class="cardFace back">
                 <img src="images/front.png" alt="">
             </div>
         </div>`
-        
     }
 
     timer = setInterval(timeCounter, 1000)
@@ -93,9 +86,9 @@ function win() {
     if(document.querySelectorAll(".fliped").length === 0) {    
 
         clearInterval(timer)
-        alert(`Você venceu em ${playCount} jogadas, cem um tempo de ${document.querySelector(".stopwatch").innerHTML}`)
+        alert(`Você venceu em ${playCount} jogadas, com um tempo de ${document.querySelector(".stopwatch").innerHTML}`)
 
-        const answer = prompt("Você quer jogar novamente? responda com 'sim' ou 'não'")
+        let answer = prompt("Você quer jogar novamente? responda com 'sim' ou 'não'")
 
         while (answer !== "sim" && answer !== "não") {
             alert("A única opções de resposta é 'sim' ou 'não'")
@@ -104,11 +97,7 @@ function win() {
 
         if (answer === "sim") {
 
-            let cards = document.querySelectorAll(".card")
-            for (let i = 0; i < numberOfCards; i++) {
-                cards[i].remove()
-            }
-
+            cardsContainer.innerHTML = ""
             playCount = 0
             sec = 0
             startGame()
