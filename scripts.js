@@ -1,6 +1,7 @@
 
 let timer
 const cardsContainer = document.querySelector(".container")
+const clock = document.querySelector(".stopwatch")
 
 startGame()  
 
@@ -81,30 +82,6 @@ function flipCard(fliped) {
     setTimeout(win, 500)
 }
 
-function win() {
-
-    if(document.querySelectorAll(".fliped").length === 0) {    
-
-        clearInterval(timer)
-        alert(`Você venceu em ${playCount} jogadas, com um tempo de ${document.querySelector(".stopwatch").innerHTML}`)
-
-        let answer = prompt("Você quer jogar novamente? responda com 'sim' ou 'não'")
-
-        while (answer !== "sim" && answer !== "não") {
-            alert("A única opções de resposta é 'sim' ou 'não'")
-            answer = prompt("Você quer jogar novamente? responda com 'sim' ou 'não'")
-        }
-
-        if (answer === "sim") {
-
-            cardsContainer.innerHTML = ""
-            playCount = 0
-            sec = 0
-            startGame()
-        }
-    }
-}
-
 let sec = 0
 let min = 0
 let hour = 0
@@ -133,5 +110,41 @@ function timeCounter () {
 
     timerHour = (hour < 10) ? "0" + hour : hour
 
-    document.querySelector(".stopwatch").innerHTML = `${timerHour}:${timerMin}:${timerSec}`
+    clock.innerHTML = `${timerHour}:${timerMin}:${timerSec}`
+}
+
+function win() {
+
+    if(document.querySelectorAll(".fliped").length === 0) {    
+
+        clearInterval(timer)
+
+        let winMensage = ""
+
+        if (hour > 0) {
+            winMensage = `${hour} horas, ${min} minutor e ${sec} segundos`
+        } else if (min > 0){
+            winMensage = `${min} minutor e ${sec} segundos`
+        } else {
+            winMensage = `${sec} segundos`
+        }
+
+        alert(`Você venceu em ${playCount} jogadas, com um tempo de ${winMensage}`)
+
+        let answer = prompt("Você quer jogar novamente? responda com 'sim' ou 'não'")
+
+        while (answer !== "sim" && answer !== "não") {
+            alert("A única opções de resposta é 'sim' ou 'não'")
+            answer = prompt("Você quer jogar novamente? responda com 'sim' ou 'não'")
+        }
+
+        if (answer === "sim") {
+
+            cardsContainer.innerHTML = ""
+            clock.innerHTML = "00:00:00"
+            playCount = 0
+            sec = 0
+            startGame()
+        }
+    }
 }
